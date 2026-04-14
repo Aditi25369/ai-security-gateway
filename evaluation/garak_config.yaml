@@ -1,0 +1,57 @@
+# Garak Red Team Configuration
+# LLM vulnerability scanner configuration
+# Run with: garak --model_type openai --model_name http://localhost:8080/v1 --config garak_config.yaml
+
+plugins:
+  model_type: openai
+  model_name: http://localhost:8080/v1
+  
+probes:
+  # Prompt injection probes
+  - promptinject:
+      - all
+  
+  # Known attack patterns
+  - knownbadsignatures:
+      - all
+  
+  # Encoding-based attacks
+  - encoding:
+      - base64
+      - rot13
+      - hex
+  
+  # Jailbreak probes
+  - dan:
+      - all
+  - devmode:
+      - all
+  - disemvowel:
+      - all
+  
+  # Data leakage probes
+  - leakreplay:
+      - all
+  
+  # Reversal probes
+  - reversal:
+      - all
+  
+  # Injection probes
+  - suffix:
+      - all
+
+generators:
+  # Use local gateway
+  openai:
+    api_key: "sk-test-key"
+    api_base: "http://localhost:8080/v1"
+    model: "gpt-4"
+    temperature: 0.7
+    max_tokens: 150
+
+reporting:
+  report_prefix: garak_security_scan
+  evaluation_baseline: comprehensive
+  show_failed: true
+  show_passed: false
